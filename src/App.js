@@ -1,14 +1,28 @@
 import React, { Component } from 'react';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import {cyan500} from 'material-ui/styles/colors';
 import Paper from 'material-ui/Paper';
 import Checkbox from 'material-ui/Checkbox';
 
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
+
 const style = {
+  app: {
+    width: '100%',
+    height: '100%',
+  },
   paper: {
     width: 300,
     margin: 20,
     padding: 20,
   },
   h1: {
+    color: cyan500,
     fontSize: 24,
   }
 };
@@ -27,29 +41,31 @@ class App extends Component {
 
   render() {
     return (
-      <Paper style={ style.paper } id="paper" zDepth={5}>
-        <h1 style={ style.h1 }>Listeners on paper</h1>
-        <Checkbox
-          checked={ this.state.onMouseDown }
-          label="Listen clicking"
-          onCheck={ this.toggleOnMouseDown }
-        />
-        <Checkbox
-          checked={ this.state.onMouseMove }
-          label="Listen mouse movement"
-          onCheck={ this.toggleOnMouseMove }
-        />
-        <Checkbox
-          checked={ this.state.onScroll }
-          label="Listen mouse scrolling"
-          onCheck={ this.toggleOnScroll }
-        />
-        <ul>
-          <li id="onMouseDown">Not listening clicking</li>
-          <li id="onMouseMove">Not listening movement</li>
-          <li id="onScroll">Not listening scrolling</li>
-        </ul>
-      </Paper>
+      <MuiThemeProvider muiTheme={ getMuiTheme(darkBaseTheme) }>
+        <Paper style={ style.paper } id="paper" zDepth={5}>
+          <h1 style={ style.h1 }>Listeners on paper</h1>
+          <Checkbox
+            checked={ this.state.onMouseDown }
+            label="Listen clicking"
+            onCheck={ this.toggleOnMouseDown }
+          />
+          <Checkbox
+            checked={ this.state.onMouseMove }
+            label="Listen mouse movement"
+            onCheck={ this.toggleOnMouseMove }
+          />
+          <Checkbox
+            checked={ this.state.onScroll }
+            label="Listen mouse scrolling"
+            onCheck={ this.toggleOnScroll }
+          />
+          <ul>
+            <li id="onMouseDown">Not listening clicking</li>
+            <li id="onMouseMove">Not listening movement</li>
+            <li id="onScroll">Not listening scrolling</li>
+          </ul>
+        </Paper>
+      </MuiThemeProvider>
     );
   }
 
