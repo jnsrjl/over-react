@@ -14,7 +14,7 @@ import MenuItem from 'material-ui/MenuItem';
 // My Components
 import LandingPage from './components/LandingPage';
 import ListenerPaper from './components/ListenerPaper';
-import PeopleResource from './components/PeopleResource';
+import AppBarLink from './components/AppBarLink';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -24,14 +24,14 @@ class App extends Component {
   menuItems = [
       { text: "Home", component: <LandingPage /> },
       { text: "1.4 : Listeners", component: <ListenerPaper /> },
-      { text: "2.4 : Analyzer", component: <PeopleResource /> }
+      { text: "2.1 : AppBar Link", component: <AppBarLink /> }
   ];
 
   constructor(props) {
     super(props);
     this.state = {
       drawerOpen: false,
-      contentId: 0
+      contentId: 2
     };
   }
 
