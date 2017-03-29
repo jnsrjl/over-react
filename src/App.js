@@ -16,7 +16,7 @@ import LandingPage from './components/LandingPage';
 import ListenerPaper from './components/ListenerPaper';
 import AppBarWithLink from './components/AppBarWithLink';
 import PeopleStatsView from './components/PeopleStatsView';
-import FilterableImageGrid from './components/FilterableImageGrid';
+import FilterableImageGrid from './components/FilterableImageGrid/FilterableImageGrid';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
