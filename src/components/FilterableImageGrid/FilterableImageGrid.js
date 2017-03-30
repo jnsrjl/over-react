@@ -15,6 +15,7 @@ import photo_adorbs from './cat_adorbs.jpg';
 import photo_grumpy from './cat_grumpy.jpeg';
 import photo_white from './cat_white.jpg';
 
+// Styles
 const styles = {
   root: {
     display: 'flex',
@@ -26,11 +27,9 @@ const styles = {
     margin: 10,
     padding: 10,
   },
-  gridList: {
-    overflowY: 'auto',
-  }
 };
 
+// Photos
 const PHOTOS = [
   { path: photo_derp, name: "derp", sizeKB: 7244 },
   { path: photo_hover, name: "hover", sizeKB: 60 },
@@ -41,8 +40,13 @@ const PHOTOS = [
   { path: photo_white, name: "white", sizeKB: 37 },
 ];
 
+/*
+* Component with radio buttons which trigger filtering
+* @prop onFilterChange(filterValue) : function
+*/
 class Filter extends React.Component {
 
+  // On change : pass filter's value to parent
   handleFilterChange = (e) => {
     this.props.onFilterChange(e.target.value);
   }
@@ -50,6 +54,7 @@ class Filter extends React.Component {
   render() {
     return (
       <Paper style={ styles.radioPaper } zDepth={3}>
+        <Subheader>Filters</Subheader>
         <RadioButtonGroup
           name="filter"
           defaultSelected="name_asc"
@@ -77,13 +82,16 @@ class Filter extends React.Component {
   }
 }
 
+/*
+* Component for a grid of images
+* @prop photos : json array
+*/
 class ImageGrid extends React.Component {
   render() {
     return (
       <div style={styles.root}>
         <GridList
           cols={4}
-          style={styles.gridList}
         >
           <Subheader>Images</Subheader>
           {this.props.photos.map((photo, id) => (
@@ -92,7 +100,10 @@ class ImageGrid extends React.Component {
               title={photo.name}
               subtitle={<span>size <b>{photo.sizeKB}KB</b></span>}
             >
-              <img src={photo.path} alt="" />
+              <img
+                src={photo.path}
+                alt=""
+              />
             </GridTile>
           ))}
         </GridList>
@@ -101,23 +112,39 @@ class ImageGrid extends React.Component {
   }
 }
 
+/*
+* Component with image grid that can be filtered with radio buttons
+* @child Filter
+* @child ImageGrid
+*/
+
 class FilterableImageGrid extends React.Component {
 
   constructor(props) {
     super(props);
+    // Init state with static photos
     this.state = {
       photos: PHOTOS,
     };
   }
 
-  componentDidMount = () => {
+  // Init filter
+  componentWillMount = () => {
     this.handleFilterChange("name_asc");
   }
 
+  /*
+  * Handler for filter change : passed from Filter
+  * @param filterValue : string
+  */
   handleFilterChange = (filterValue) => {
+    // Get current photo list
     let photos = this.state.photos;
+
+    // Init comparing function
     let sortBy = null;
 
+    // Set comparing function by param
     if (filterValue === "name_asc") {
       sortBy = (a,b) => { return a.name.localeCompare(b.name) };
     }
@@ -131,10 +158,17 @@ class FilterableImageGrid extends React.Component {
       sortBy = (a,b) => { return b.sizeKB - a.sizeKB };
     }
 
+    // Sort by passing comparing function
     photos.sort(sortBy);
+
+    // Set new state
     this.setState({ photos: photos });
   }
 
+  /*
+  * @prop onFilterChange : function : to Filter
+  * @prop photos : json array : to ImageGrid
+  */
   render() {
     return (
       <div>
