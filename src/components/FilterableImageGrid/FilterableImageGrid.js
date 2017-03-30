@@ -7,13 +7,13 @@ import Paper from 'material-ui/Paper';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 // Pics
-import photo_derp from './cat_derp.jpeg';
-import photo_hover from './cat_hover.jpg';
-import photo_roar from './cat_roar.jpeg';
-import photo_roll from './cat_roll.jpg';
-import photo_adorbs from './cat_adorbs.jpg';
-import photo_grumpy from './cat_grumpy.jpeg';
-import photo_white from './cat_white.jpg';
+import photo_derp from '../../assets/cat_derp.jpeg';
+import photo_hover from '../../assets/cat_hover.jpg';
+import photo_roar from '../../assets/cat_roar.jpeg';
+import photo_roll from '../../assets/cat_roll.jpg';
+import photo_adorbs from '../../assets/cat_adorbs.jpg';
+import photo_grumpy from '../../assets/cat_grumpy.jpeg';
+import photo_white from '../../assets/cat_white.jpg';
 
 // Styles
 const styles = {
