@@ -17,6 +17,7 @@ import ListenerPaper from './components/ListenerPaper';
 import AppBarWithLink from './components/AppBarWithLink';
 import PeopleStatsView from './components/PeopleStatsView';
 import FilterableImageGrid from './components/FilterableImageGrid/FilterableImageGrid';
+import ColorCreator from './components/ColorCreator/ColorCreator';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -29,6 +30,7 @@ class App extends Component {
       { text: "2.1 : AppBar Link", component: <AppBarWithLink /> },
       { text: "2.2 : People Stats View", component: <PeopleStatsView /> },
       { text: "3.4 : Filterable Image Grid", component: <FilterableImageGrid /> },
+      { text: "4.4 : Color Editor", component: <ColorCreator /> },
   ];
 
   constructor(props) {
