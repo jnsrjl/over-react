@@ -21,29 +21,16 @@ const styles = {
 };
 
 const COLORS = [
-  { name: "moss green", rgb: "rgb(255,0,0)" },
-  { name: "fuchia", rgb: "rgb(255,0,0)" },
-  { name: "salmon", rgb: "rgb(255,0,0)" },
-  { name: "powder blue", rgb: "rgb(255,0,0)" },
-  { name: "turquoise", rgb: "rgb(255,0,0)" },
-  { name: "aquamarine", rgb: "rgb(0,0,255)" },
-];
-
-const COMBOS= [
-  { name: "salmon", rgb: "rgb(250,128,114)" },
-  { name: "salmon", rgb: "rgb(250,128,114)" },
-  { name: "salmon", rgb: "rgb(250,128,114)" },
-  { name: "salmon", rgb: "rgb(250,128,114)" },
-  { name: "salmon", rgb: "rgb(250,128,114)" },
-  { name: "salmon", rgb: "rgb(250,128,114)" },
-  { name: "salmon", rgb: "rgb(250,128,114)" },
-  { name: "salmon", rgb: "rgb(250,128,114)" },
-  { name: "salmon", rgb: "rgb(250,128,114)" },
-  { name: "salmon", rgb: "rgb(250,128,114)" },
-  { name: "salmon", rgb: "rgb(250,128,114)" },
+  { name: "moss green" },
+  { name: "fuchia" },
+  { name: "salmon" },
+  { name: "powder blue" },
+  { name: "turquoise" },
+  { name: "aquamarine" },
 ];
 
 class UndoRedo extends React.Component {
+
   render() {
     return (
       <div>
@@ -58,23 +45,56 @@ class UndoRedo extends React.Component {
   }
 }
 
+/*
+* Edit color by choosing name (dropdown) and rgbs with sliders
+* @prop colors : array : { name: "green" }
+*/
 class ColorEditor extends React.Component {
+
+  // Send SelectField's value to parent
+  handleSelectFieldChange = (event, index, value) => {
+    this.props.onSelectFieldChange(value);
+  }
+
+  // Select slider's name and value to parent
+  handleSliderRedChange = (event, value) => {
+    this.props.onSliderChange("red", value);
+  }
+
+  handleSliderGreenChange = (event, value) => {
+    this.props.onSliderChange("green", value);
+  }
+
+  handleSliderBlueChange = (event, value) => {
+    this.props.onSliderChange("blue", value);
+  }
+
+  handleAddTouchTap = () => {
+    this.props.onAddTouchTap();
+  }
+
+  color = () => {
+    let red = this.props.red;
+    let green = this.props.green;
+    let blue = this.props.blue;
+    return "rgb(" + red + "," + green + "," + blue + ")";
+  }
 
   render() {
     return (
       <div>
         <SelectField
           floatingLabelText="Color Name"
-          value={0}
-          onChange={null}
+          value={ this.props.selectFieldValue }
+          onChange={ this.handleSelectFieldChange }
         >
-          { this.props.colors.map((item, id) => {
-            return <MenuItem
+          { this.props.colors.map((item, id) => (
+            <MenuItem
               key={ "color_" + id }
               value={ id }
               primaryText={ item.name }
-            />;
-          })}
+            />
+          ))}
         </SelectField>
         <p>Red</p>
         <Slider
@@ -82,6 +102,7 @@ class ColorEditor extends React.Component {
           min={0}
           max={255}
           step={1}
+          onChange={ this.handleSliderRedChange }
         />
         <p>Green</p>
         <Slider
@@ -89,6 +110,7 @@ class ColorEditor extends React.Component {
           min={0}
           max={255}
           step={1}
+          onChange={ this.handleSliderGreenChange }
         />
         <p>Blue</p>
         <Slider
@@ -96,13 +118,14 @@ class ColorEditor extends React.Component {
           min={0}
           max={255}
           step={1}
+          onChange={ this.handleSliderBlueChange }
         />
         <Paper
           style={{
             height: 100,
             width: 100,
             margin: 15,
-            backgroundColor: "rgb(250,128,114)",
+            backgroundColor: this.color(),
             textAlign: 'center',
           }}
           circle={true}
@@ -110,12 +133,17 @@ class ColorEditor extends React.Component {
         <RaisedButton
           label="Add"
           primary={true}
+          onTouchTap={ this.handleAddTouchTap }
         />
       </div>
     );
   }
 }
 
+/*
+* Display grid of boxes with name and color
+* @prop combos : array : { name: "", color: "rgb(0,0,0)" }
+*/
 class ColorList extends React.Component {
   render() {
     return (
@@ -139,12 +167,61 @@ class ColorList extends React.Component {
 
 class ColorCreator extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectFieldValue: 1,
+      red: 0,
+      green: 0,
+      blue: 0,
+      combos: [],
+    };
+  }
+
+  handleSelectField = (value) => {
+    this.setState({ selectFieldValue: value });
+  }
+
+  handleSlider = (name, value) => {
+    if (0 <= value && value <= 255) {
+      this.setState({ [name]: value });
+    }
+  }
+
+  handleAdd = () => {
+    let arr = this.state.combos.slice();
+    let combo = {
+      name: COLORS[this.state.selectFieldValue].name,
+      rgb: "rgb(" +
+            this.state.red +
+            "," +
+            this.state.green +
+            "," +
+            this.state.blue +
+            ")",
+    };
+    arr.push(combo);
+    this.setState({ combos: arr });
+  }
+
   render() {
     return (
       <div style={ styles.colorCreator }>
-        <UndoRedo />
-        <ColorEditor colors={COLORS} />
-        <ColorList combos={COMBOS} />
+        <UndoRedo
+          onUndo={ this.handleUndo }
+          onRedo={ this.handleRedo }
+        />
+        <ColorEditor
+          colors={COLORS}
+          red={ this.state.red }
+          green={ this.state.green }
+          blue={ this.state.blue }
+          selectFieldValue={ this.state.selectFieldValue }
+          onSelectFieldChange={ this.handleSelectField }
+          onSliderChange={ this.handleSlider }
+          onAddTouchTap={ this.handleAdd }
+        />
+        <ColorList combos={ this.state.combos } />
       </div>
     );
   }
