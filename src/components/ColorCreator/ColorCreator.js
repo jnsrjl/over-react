@@ -10,7 +10,7 @@ import Paper from 'material-ui/Paper';
 
 const styles = {
   colorCreator: {
-    width: 760,
+    maxWidth: 760,
     padding: 20,
   },
   gridList: {
@@ -22,7 +22,7 @@ const styles = {
 
 const COLORS = [
   { name: "moss green" },
-  { name: "fuchia" },
+  { name: "fuchsia" },
   { name: "salmon" },
   { name: "powder blue" },
   { name: "turquoise" },
@@ -31,14 +31,24 @@ const COLORS = [
 
 class UndoRedo extends React.Component {
 
+  handleUndoTouchTap = () => {
+    this.props.onUndo();
+  }
+
+  handleRedoTouchTap = () => {
+    this.props.onRedo();
+  }
+
   render() {
     return (
       <div>
         <RaisedButton
           label="Undo"
+          onTouchTap={ this.handleUndoTouchTap }
         />
         <RaisedButton
           label="Redo"
+          onTouchTap={ this.handleRedoTouchTap }
         />
       </div>
     );
@@ -102,6 +112,7 @@ class ColorEditor extends React.Component {
           min={0}
           max={255}
           step={1}
+          value={ this.props.red }
           onChange={ this.handleSliderRedChange }
         />
         <p>Green</p>
@@ -110,6 +121,7 @@ class ColorEditor extends React.Component {
           min={0}
           max={255}
           step={1}
+          value={ this.props.green }
           onChange={ this.handleSliderGreenChange }
         />
         <p>Blue</p>
@@ -118,6 +130,7 @@ class ColorEditor extends React.Component {
           min={0}
           max={255}
           step={1}
+          value={ this.props.blue }
           onChange={ this.handleSliderBlueChange }
         />
         <Paper
@@ -171,10 +184,12 @@ class ColorCreator extends React.Component {
     super(props);
     this.state = {
       selectFieldValue: 1,
-      red: 0,
-      green: 0,
-      blue: 0,
+      red: 117,
+      green: 117,
+      blue: 117,
       combos: [],
+      history: [],
+      future: [],
     };
   }
 
@@ -202,6 +217,14 @@ class ColorCreator extends React.Component {
     };
     arr.push(combo);
     this.setState({ combos: arr });
+  }
+
+  handleUndo = () => {
+    console.log("undo");
+  }
+
+  handleRedo = () => {
+    console.log("redo");
   }
 
   render() {
